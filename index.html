@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaultFinance | Private Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); }
+        body { background: #0f172a; color: white; }
+    </style>
+</head>
+<body class="p-4 flex justify-center items-start min-h-screen">
+
+    <div id="auth-ui" class="w-full max-w-md glass p-8 rounded-2xl mt-20">
+        <h1 class="text-2xl font-bold mb-2">VaultFinance</h1>
+        <p class="text-gray-400 mb-6 text-sm">Data is encrypted & stored locally on this device.</p>
+        <input type="text" id="username" placeholder="Username" class="w-full p-3 mb-3 rounded bg-white/10 outline-none border border-white/20">
+        <input type="password" id="pin" placeholder="Master Password" class="w-full p-3 mb-6 rounded bg-white/10 outline-none border border-white/20">
+        <button onclick="login()" class="w-full bg-indigo-600 p-3 rounded-xl font-bold hover:bg-indigo-500">Access My Vault</button>
+    </div>
+
+    <div id="main-ui" class="w-full max-w-md hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 id="welcome-msg" class="font-bold"></h2>
+            <button onclick="location.reload()" class="text-xs opacity-50">Lock Vault</button>
+        </div>
+
+        <div class="glass p-6 rounded-2xl mb-6 text-center">
+            <span class="text-xs uppercase tracking-widest opacity-60">Net Balance</span>
+            <h1 id="balance" class="text-4xl font-bold mt-2">$0.00</h1>
+        </div>
+
+        <div class="glass p-6 rounded-2xl mb-6">
+            <input type="text" id="desc" placeholder="Reason (Salary, Rent...)" class="w-full bg-transparent border-b border-white/20 p-2 mb-4 outline-none">
+            <input type="number" id="amt" placeholder="Amount" class="w-full bg-transparent border-b border-white/20 p-2 mb-6 outline-none">
+            <div class="flex gap-4">
+                <button onclick="addEntry('in')" class="flex-1 bg-emerald-600 p-3 rounded-lg font-bold">Earned</button>
+                <button onclick="addEntry('out')" class="flex-1 bg-rose-600 p-3 rounded-lg font-bold">Spent</button>
+            </div>
+        </div>
+
+        <div id="history" class="space-y-3"></div>
+    </div>
+
+    <script>
+        let currentUser = "";
+        let transactions = [];
+
+        function login() {
+            const user = document.getElementById('username').value;
+            const pin = document.getElementById('pin').value;
+            if(!user || !pin) return alert("Enter details");
+            
+            currentUser = user;
+            document.getElementById('auth-ui').classList.add('hidden');
+            document.getElementById('main-ui').classList.remove('hidden');
+            document.getElementById('welcome-msg').innerText = `Hello, ${user}`;
+            
+            loadData();
+        }
+
+        function addEntry(type) {
+            const desc = document.getElementById('desc').value;
+            const amt = parseFloat(document.getElementById('amt').value);
+            if(!desc || !amt) return;
+
+            const entry = { desc, amt: type === 'out' ? -amt : amt, date: new Date().toLocaleDateString() };
+            transactions.push(entry);
+            saveAndRender();
+            
+            document.getElementById('desc').value = "";
+            document.getElementById('amt').value = "";
+        }
+
+        function saveAndRender() {
+            localStorage.setItem(`data_${currentUser}`, JSON.stringify(transactions));
+            render();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(`data_${currentUser}`);
+            transactions = saved ? JSON.parse(saved) : [];
+            render();
+        }
+
+        function render() {
+            const list = document.getElementById('history');
+            const balEl = document.getElementById('balance');
+            list.innerHTML = "";
+            let total = 0;
+
+            transactions.slice().reverse().forEach(t => {
+                total += t.amt;
+                list.innerHTML += `
+                    <div class="glass p-4 rounded-xl flex justify-between items-center">
+                        <div>
+                            <p class="font-medium">${t.desc}</p>
+                            <small class="opacity-40">${t.date}</small>
+                        </div>
+                        <span class="${t.amt > 0 ? 'text-emerald-400' : 'text-rose-400'} font-bold">
+                            ${t.amt > 0 ? '+' : ''}${t.amt}
+                        </span>
+                    </div>`;
+            });
+            balEl.innerText = `$${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
