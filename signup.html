@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create your vault — VaultFinance</title>
-<link rel="stylesheet" href="./CSS/style.css">
+<link rel="stylesheet" href="assets/style.css">
 <style>
   .vf-auth-wrap {
     width: 100%;
@@ -96,7 +96,7 @@
   </div>
 </main>
 
-<script src="./JS/core.js"></script>
+<script src="assets/core.js"></script>
 <script>
   const passwordInput = document.getElementById('su-password');
   const bars = document.querySelectorAll('.vf-strength-bar');
@@ -140,7 +140,7 @@
     }
 
     VaultToast.show('Vault created. Log in to continue.', 'success');
-    setTimeout(() => (window.location.href = './signin.html'), 900);
+    setTimeout(() => (window.location.href = 'signin.html'), 900);
   });
 </script>
 </body>
