@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create your vault — VaultFinance</title>
+<link rel="stylesheet" href="./CSS/style.css">
+<style>
+  .vf-auth-wrap {
+    width: 100%;
+    max-width: 420px;
+    padding-top: 40px;
+  }
+
+  .vf-auth-card { padding: 40px 36px; }
+
+  .vf-auth-head { text-align: center; margin-bottom: 32px; }
+
+  .vf-auth-head h1 { font-size: 26px; margin-bottom: 8px; }
+  .vf-auth-head p { font-size: 13.5px; color: var(--text-dim); margin: 0; }
+
+  .vf-auth-switch {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+  }
+
+  .vf-auth-switch a { color: var(--accent); font-weight: 600; }
+  .vf-auth-switch a:hover { text-decoration: underline; }
+
+  .vf-strength {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .vf-strength-bar {
+    height: 3px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background-color 0.25s ease;
+  }
+
+  .vf-strength-hint {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div id="vf-nav-root"></div>
+
+<main class="vf-page">
+  <div class="vf-auth-wrap">
+    <div class="vf-auth-card vf-panel">
+      <div class="vf-auth-head">
+        <h1>Create your vault</h1>
+        <p>Your credentials stay in this browser only.</p>
+      </div>
+
+      <form id="signup-form" novalidate>
+        <div class="vf-field">
+          <label for="su-username">Username</label>
+          <input type="text" id="su-username" class="vf-input" placeholder="e.g. sam_dev" autocomplete="username" required>
+        </div>
+
+        <div class="vf-field">
+          <label for="su-password">Password</label>
+          <input type="password" id="su-password" class="vf-input" placeholder="At least 6 characters" autocomplete="new-password" required>
+          <div class="vf-strength" id="strength-bars">
+            <div class="vf-strength-bar"></div>
+            <div class="vf-strength-bar"></div>
+            <div class="vf-strength-bar"></div>
+          </div>
+          <div class="vf-strength-hint" id="strength-hint">Mix in numbers and symbols for a stronger password.</div>
+        </div>
+
+        <div class="vf-field">
+          <label for="su-confirm">Confirm password</label>
+          <input type="password" id="su-confirm" class="vf-input" placeholder="Re-enter your password" autocomplete="new-password" required>
+        </div>
+
+        <div class="vf-error-text" id="signup-error"></div>
+
+        <button type="submit" class="vf-btn vf-btn-primary vf-btn-block vf-btn-lg">Create account</button>
+      </form>
+
+      <div class="vf-auth-switch">
+        Already have a vault? <a href="signin.html">Log in</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="./JS/core.js"></script>
+<script>
+  const passwordInput = document.getElementById('su-password');
+  const bars = document.querySelectorAll('.vf-strength-bar');
+  const hint = document.getElementById('strength-hint');
+
+  function scorePassword(pw) {
+    let score = 0;
+    if (pw.length >= 6) score++;
+    if (pw.length >= 10) score++;
+    if (/[0-9]/.test(pw) && /[^a-zA-Z0-9]/.test(pw)) score++;
+    return score;
+  }
+
+  passwordInput.addEventListener('input', () => {
+    const score = scorePassword(passwordInput.value);
+    const colors = ['var(--rose)', 'var(--accent)', 'var(--emerald)'];
+    const labels = ['Weak — add length or symbols', 'Decent — a symbol or number helps', 'Strong password'];
+    bars.forEach((bar, i) => {
+      bar.style.background = i < score ? colors[Math.max(score - 1, 0)] : 'var(--border)';
+    });
+    hint.textContent = passwordInput.value ? labels[Math.max(score - 1, 0)] : 'Mix in numbers and symbols for a stronger password.';
+  });
+
+  document.getElementById('signup-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('su-username').value;
+    const password = document.getElementById('su-password').value;
+    const confirm = document.getElementById('su-confirm').value;
+    const errorEl = document.getElementById('signup-error');
+    errorEl.textContent = '';
+
+    if (password !== confirm) {
+      errorEl.textContent = 'Passwords do not match.';
+      return;
+    }
+
+    const result = VaultAuth.signUp(username, password);
+    if (!result.ok) {
+      errorEl.textContent = result.error;
+      return;
+    }
+
+    VaultToast.show('Vault created. Log in to continue.', 'success');
+    setTimeout(() => (window.location.href = './signin.html'), 900);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — VaultFinance</title>
+<link rel="stylesheet" href="./CSS/style.css">
+<style>
+  .vf-auth-wrap {
+    width: 100%;
+    max-width: 420px;
+    padding-top: 40px;
+  }
+
+  .vf-auth-card { padding: 40px 36px; }
+  .vf-auth-head { text-align: center; margin-bottom: 32px; }
+  .vf-auth-head h1 { font-size: 26px; margin-bottom: 8px; }
+  .vf-auth-head p { font-size: 13.5px; color: var(--text-dim); margin: 0; }
+
+  .vf-auth-switch {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+  }
+
+  .vf-auth-switch a { color: var(--accent); font-weight: 600; }
+  .vf-auth-switch a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div id="vf-nav-root"></div>
+
+<main class="vf-page">
+  <div class="vf-auth-wrap">
+    <div class="vf-auth-card vf-panel">
+      <div class="vf-auth-head">
+        <h1>Welcome back</h1>
+        <p>Log in to access your ledger.</p>
+      </div>
+
+      <form id="signin-form" novalidate>
+        <div class="vf-field">
+          <label for="si-username">Username</label>
+          <input type="text" id="si-username" class="vf-input" placeholder="Your username" autocomplete="username" required>
+        </div>
+
+        <div class="vf-field">
+          <label for="si-password">Password</label>
+          <input type="password" id="si-password" class="vf-input" placeholder="Your password" autocomplete="current-password" required>
+        </div>
+
+        <div class="vf-error-text" id="signin-error"></div>
+
+        <button type="submit" class="vf-btn vf-btn-primary vf-btn-block vf-btn-lg">Log in</button>
+      </form>
+
+      <div class="vf-auth-switch">
+        No vault yet? <a href="./signup.html">Create one</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="./JS/core.js"></script>
+<script>
+  document.getElementById('signin-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('si-username').value;
+    const password = document.getElementById('si-password').value;
+    const errorEl = document.getElementById('signin-error');
+    errorEl.textContent = '';
+
+    const result = VaultAuth.logIn(username, password);
+    if (!result.ok) {
+      errorEl.textContent = result.error;
+      return;
+    }
+
+    VaultToast.show(`Welcome back, ${username}.`, 'success');
+    setTimeout(() => (window.location.href = './app.html'), 700);
+  });
+</script>
+</body>
+</html>

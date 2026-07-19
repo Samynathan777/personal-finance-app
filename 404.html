@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Signal Lost | VaultFinance</title>
+<link rel="stylesheet" href="./CSS/style.css">
+<style>
+  .vf-404-wrap {
+    min-height: calc(100vh - 104px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+  }
+
+  .vf-glitch-num {
+    font-family: var(--font-display);
+    font-size: clamp(100px, 22vw, 220px);
+    font-weight: 700;
+    line-height: 1;
+    position: relative;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .vf-glitch-num::before,
+  .vf-glitch-num::after {
+    content: "404";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .vf-glitch-num::before {
+    animation: vf-glitch-1 3.2s infinite linear alternate-reverse;
+    clip-path: polygon(0 2%, 100% 2%, 100% 40%, 0 40%);
+  }
+
+  .vf-glitch-num::after {
+    animation: vf-glitch-2 2.6s infinite linear alternate-reverse;
+    clip-path: polygon(0 60%, 100% 60%, 100% 98%, 0 98%);
+  }
+
+  @keyframes vf-glitch-1 {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-4px, 2px); }
+    40% { transform: translate(4px, -2px); }
+    60% { transform: translate(-3px, 1px); }
+    80% { transform: translate(3px, -1px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  @keyframes vf-glitch-2 {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(3px, -1px); }
+    50% { transform: translate(-3px, 2px); }
+    75% { transform: translate(2px, 1px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .vf-404-sub {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-top: 8px;
+    animation: vf-flicker 2.4s infinite;
+  }
+
+  @keyframes vf-flicker {
+    0%, 92%, 100% { opacity: 1; }
+    93% { opacity: 0.3; }
+    94% { opacity: 1; }
+    95% { opacity: 0.4; }
+    96% { opacity: 1; }
+  }
+
+  .vf-404-msg {
+    max-width: 440px;
+    margin: 24px 0 36px;
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .vf-scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.6;
+    animation: vf-scan 3.5s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes vf-scan {
+    0% { top: 0%; }
+    100% { top: 100%; }
+  }
+
+  .vf-404-code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin-bottom: 32px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vf-glitch-num::before, .vf-glitch-num::after, .vf-scan-line, .vf-404-sub {
+      animation: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="vf-nav-root"></div>
+
+<main class="vf-page">
+  <div class="vf-404-wrap">
+    <div class="vf-scan-line"></div>
+    <div class="vf-glitch-num" aria-label="404">404</div>
+    <div class="vf-404-sub">// signal_lost</div>
+    <p class="vf-404-msg">This route doesn't exist in the ledger. The page you're looking for was never logged, or it's been moved.</p>
+    <div class="vf-404-code mono">GET ${window.location.pathname} → 404 NOT_FOUND</div>
+    <a href="./index.html" class="vf-btn vf-btn-primary vf-btn-lg">Return to base</a>
+  </div>
+</main>
+
+<script src="./JS/core.js"></script>
+<script>
+  document.querySelector('.vf-404-code').textContent =
+    `GET ${window.location.pathname} → 404 NOT_FOUND`;
+</script>
+</body>
+</html>
