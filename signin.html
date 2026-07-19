@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Log in — VaultFinance</title>
-<link rel="stylesheet" href="./CSS/style.css">
+<link rel="stylesheet" href="assets/style.css">
 <style>
   .vf-auth-wrap {
     width: 100%;
@@ -57,13 +57,13 @@
       </form>
 
       <div class="vf-auth-switch">
-        No vault yet? <a href="./signup.html">Create one</a>
+        No vault yet? <a href="signup.html">Create one</a>
       </div>
     </div>
   </div>
 </main>
 
-<script src="./JS/core.js"></script>
+<script src="assets/core.js"></script>
 <script>
   document.getElementById('signin-form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -79,7 +79,7 @@
     }
 
     VaultToast.show(`Welcome back, ${username}.`, 'success');
-    setTimeout(() => (window.location.href = './app.html'), 700);
+    setTimeout(() => (window.location.href = 'app.html'), 700);
   });
 </script>
 </body>
