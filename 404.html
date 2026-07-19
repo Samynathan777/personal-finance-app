@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>404 — Signal Lost | VaultFinance</title>
-<link rel="stylesheet" href="./CSS/style.css">
+<link rel="stylesheet" href="assets/style.css">
 <style>
   .vf-404-wrap {
     min-height: calc(100vh - 104px);
@@ -134,11 +134,11 @@
     <div class="vf-404-sub">// signal_lost</div>
     <p class="vf-404-msg">This route doesn't exist in the ledger. The page you're looking for was never logged, or it's been moved.</p>
     <div class="vf-404-code mono">GET ${window.location.pathname} → 404 NOT_FOUND</div>
-    <a href="./index.html" class="vf-btn vf-btn-primary vf-btn-lg">Return to base</a>
+    <a href="index.html" class="vf-btn vf-btn-primary vf-btn-lg">Return to base</a>
   </div>
 </main>
 
-<script src="./JS/core.js"></script>
+<script src="assets/core.js"></script>
 <script>
   document.querySelector('.vf-404-code').textContent =
     `GET ${window.location.pathname} → 404 NOT_FOUND`;
