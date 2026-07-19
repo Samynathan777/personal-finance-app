@@ -51,8 +51,9 @@ vaultfinance/
 ├── signin.html         # Log in
 ├── app.html           # The ledger — entries, chart, history
 ├── 404.html           # Custom not-found page
-├── assets/
+├── CSS/
 │   ├── style.css      # Full design system (tokens, nav, panels, forms)
+├── JS/
 │   └── core.js        # Auth, storage, theme, nav injection, toasts
 └── README.md
 ```
